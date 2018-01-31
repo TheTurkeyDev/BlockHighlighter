@@ -100,10 +100,10 @@ public class BlockHighlightListener
 				}
 
 				if(BlockHighlightSettings.highlightBlockFaces)
-					RenderGlobal.renderFilledBox(iblockstate.getSelectedBoundingBox(theWorld, blockpos).expand(0.002, 0.002, 0.002).offset(-d0, -d1, -d2), redAmountFill, greenAmountFill, blueAmountFill, alphaAmountFill);
+					RenderGlobal.func_189696_b(iblockstate.getSelectedBoundingBox(theWorld, blockpos).expand(0.002, 0.002, 0.002).offset(-d0, -d1, -d2), redAmountFill, greenAmountFill, blueAmountFill, alphaAmountFill);
 
 				if(BlockHighlightSettings.customHighlight)
-					RenderGlobal.drawSelectionBoundingBox(iblockstate.getSelectedBoundingBox(theWorld, blockpos).expand(0.002, 0.002, 0.002).offset(-d0, -d1, -d2), redAmountHighlight, greenAmountHighlight, blueAmountHighlight, alphaAmountHighlight);
+					RenderGlobal.func_189697_a(iblockstate.getSelectedBoundingBox(theWorld, blockpos).expand(0.002, 0.002, 0.002).offset(-d0, -d1, -d2), redAmountHighlight, greenAmountHighlight, blueAmountHighlight, alphaAmountHighlight);
 			}
 
 			GlStateManager.depthMask(true);

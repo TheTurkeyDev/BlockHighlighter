@@ -1,8 +1,8 @@
 package com.theprogrammingturkey.blockhighlighter.util;
 
-import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.Tessellator;
+import net.minecraft.client.renderer.VertexBuffer;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 
 public class RendererHelper
@@ -23,7 +23,7 @@ public class RendererHelper
 		GlStateManager.tryBlendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA, GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ZERO);
 		GlStateManager.shadeModel(7425);
 		Tessellator tessellator = Tessellator.getInstance();
-		BufferBuilder vertexbuffer = tessellator.getBuffer();
+		VertexBuffer vertexbuffer = tessellator.getBuffer();
 		vertexbuffer.begin(7, DefaultVertexFormats.POSITION_COLOR);
 		vertexbuffer.pos((double) right, (double) top, 0.0).color(f1, f2, f3, f).endVertex();
 		vertexbuffer.pos((double) left, (double) top, 0.0).color(f1, f2, f3, f).endVertex();

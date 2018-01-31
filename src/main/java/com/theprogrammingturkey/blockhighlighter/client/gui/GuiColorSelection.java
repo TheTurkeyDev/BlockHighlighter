@@ -33,7 +33,7 @@ public class GuiColorSelection
 
 	public void drawScreen(int mouseX, int mouseY, float partialTicks)
 	{
-		FontRenderer fr = Minecraft.getMinecraft().fontRenderer;
+		FontRenderer fr = Minecraft.getMinecraft().fontRendererObj;
 		fr.drawStringWithShadow(dispLabel + " Color", x + 160, y + 20, -1);
 		int argb = getIntColor();
 		int gradientX = x + 175;
