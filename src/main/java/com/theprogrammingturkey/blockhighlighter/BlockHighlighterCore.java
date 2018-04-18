@@ -12,7 +12,7 @@ import net.minecraftforge.fml.common.Mod.Instance;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.relauncher.Side;
 
-@Mod(modid = BlockHighlighterCore.MODID, version = BlockHighlighterCore.VERSION, name = BlockHighlighterCore.NAME, guiFactory = BlockHighlighterCore.GUIFACTORY)
+@Mod(modid = BlockHighlighterCore.MODID, version = BlockHighlighterCore.VERSION, name = BlockHighlighterCore.NAME, guiFactory = BlockHighlighterCore.GUIFACTORY, clientSideOnly = true)
 public class BlockHighlighterCore
 {
 	public static final String MODID = "blockhighlighter";
@@ -26,7 +26,7 @@ public class BlockHighlighterCore
 
 	@EventHandler
 	public void load(FMLPreInitializationEvent event)
-	{	
+	{
 		logger = event.getModLog();
 
 		if(event.getSide() == Side.CLIENT)
