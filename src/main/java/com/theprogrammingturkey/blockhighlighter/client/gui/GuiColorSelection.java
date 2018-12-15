@@ -60,7 +60,7 @@ public class GuiColorSelection
 
 	public int getIntColor()
 	{
-		return (alphaSlider.getValueAdjusted() << 24) | (redSlider.getValueAdjusted() << 16) | (greenSlider.getValueAdjusted() << 8) | blueSlider.getValueAdjusted();
+		return (alphaSlider.getValueAdjusted(255) << 24) | (redSlider.getValueAdjusted(255) << 16) | (greenSlider.getValueAdjusted(255) << 8) | (blueSlider.getValueAdjusted(255));
 	}
 
 	public float getFloatRed()
@@ -85,21 +85,21 @@ public class GuiColorSelection
 
 	public float getIntRed()
 	{
-		return this.redSlider.getValueAdjusted();
+		return this.redSlider.getValueAdjusted(255);
 	}
 
 	public float getIntGreen()
 	{
-		return this.greenSlider.getValueAdjusted();
+		return this.greenSlider.getValueAdjusted(255);
 	}
 
 	public float getIntBlue()
 	{
-		return this.blueSlider.getValueAdjusted();
+		return this.blueSlider.getValueAdjusted(255);
 	}
 
 	public float getIntAlpha()
 	{
-		return this.alphaSlider.getValueAdjusted();
+		return this.alphaSlider.getValueAdjusted(255);
 	}
 }

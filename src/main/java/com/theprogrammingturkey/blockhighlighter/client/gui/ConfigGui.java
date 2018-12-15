@@ -93,6 +93,8 @@ public class ConfigGui extends GuiScreen
 					this.useDefaultBox.visible = true;
 					this.highlightAffectedByLight.visible = true;
 					this.highlightBlockFaces.visible = true;
+					this.blinkSelectionBox.visible = true;
+					this.blinkTimerSlider.visible = true;
 				}
 				else
 				{
@@ -114,6 +116,8 @@ public class ConfigGui extends GuiScreen
 				this.useDefaultBox.visible = false;
 				this.highlightAffectedByLight.visible = false;
 				this.highlightBlockFaces.visible = false;
+				this.blinkSelectionBox.visible = false;
+				this.blinkTimerSlider.visible = false;
 			}
 			else if(button.id == 15)
 			{
@@ -132,8 +136,8 @@ public class ConfigGui extends GuiScreen
 				BlockHighlightSettings.highlightBlink = this.blinkSelectionBox.isToggledOn();
 			}
 
-			BlockHighlightSettings.highlightBlinkSpeed = this.blinkTimerSlider.getValueAdjusted();
-			BlockHighlighterConfigLoader.saveBlockHighlightSettings(boxOutlineColorSelelection, boxFillColorSelelection, thicknessSlider.getValueAdjusted());
+			BlockHighlightSettings.highlightBlinkSpeed = this.blinkTimerSlider.getValueAdjusted(1);
+			BlockHighlighterConfigLoader.saveBlockHighlightSettings(boxOutlineColorSelelection, boxFillColorSelelection, thicknessSlider.getValueAdjusted(1));
 		}
 	}
 }

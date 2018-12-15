@@ -29,7 +29,8 @@ public class GuiSlider extends GuiButton
 	}
 
 	/**
-	 * Returns 0 if the button is disabled, 1 if the mouse is NOT hovering over this button and 2 if it IS hovering over this button.
+	 * Returns 0 if the button is disabled, 1 if the mouse is NOT hovering over this button and 2 if
+	 * it IS hovering over this button.
 	 */
 	protected int getHoverState(boolean mouseOver)
 	{
@@ -37,7 +38,8 @@ public class GuiSlider extends GuiButton
 	}
 
 	/**
-	 * Fired when the mouse button is dragged. Equivalent of MouseListener.mouseDragged(MouseEvent e).
+	 * Fired when the mouse button is dragged. Equivalent of MouseListener.mouseDragged(MouseEvent
+	 * e).
 	 */
 	protected void mouseDragged(Minecraft mc, int mouseX, int mouseY)
 	{
@@ -61,7 +63,8 @@ public class GuiSlider extends GuiButton
 	}
 
 	/**
-	 * Returns true if the mouse has been pressed on this control. Equivalent of MouseListener.mousePressed(MouseEvent e).
+	 * Returns true if the mouse has been pressed on this control. Equivalent of
+	 * MouseListener.mousePressed(MouseEvent e).
 	 */
 	public boolean mousePressed(Minecraft mc, int mouseX, int mouseY)
 	{
@@ -80,7 +83,8 @@ public class GuiSlider extends GuiButton
 	}
 
 	/**
-	 * Fired when the mouse button is released. Equivalent of MouseListener.mouseReleased(MouseEvent e).
+	 * Fired when the mouse button is released. Equivalent of MouseListener.mouseReleased(MouseEvent
+	 * e).
 	 */
 	public void mouseReleased(int mouseX, int mouseY)
 	{
@@ -118,10 +122,10 @@ public class GuiSlider extends GuiButton
 		return this.sliderValue;
 	}
 
-	public int getValueAdjusted()
+	public int getValueAdjusted(float adj)
 	{
 		float displayValue = MathHelper.clamp(this.sliderValue, 0F, 1F);
-		return (int) this.denormalizeValue(displayValue);
+		return (int) (this.denormalizeValue(displayValue) * adj);
 	}
 
 	public void setValue(float value)
