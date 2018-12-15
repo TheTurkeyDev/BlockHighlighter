@@ -18,6 +18,8 @@ public class ConfigGui extends GuiScreen
 	private GuiToggleButton useDefaultBox;
 	private GuiToggleButton highlightAffectedByLight;
 	private GuiToggleButton highlightBlockFaces;
+	private GuiToggleButton blinkSelectionBox;
+	private GuiSlider blinkTimerSlider;
 
 	private boolean editingColor = false;
 
@@ -47,6 +49,8 @@ public class ConfigGui extends GuiScreen
 		this.buttonList.add(blockSelectionColors = new GuiButton(11, this.width / 2 - 100, 105, 150, 20, "Set Colors"));
 		this.buttonList.add(thicknessSlider = new GuiSlider(14, "Thickness", this.width / 2 - 100, 130, 1F, 10F, BlockHighlightSettings.highlightLineThickness, 0.5F));
 		this.buttonList.add(highlightAffectedByLight = new GuiToggleButton(16, this.width / 2 - 100, 155, 150, 20, "Dim with light levels: ", BlockHighlightSettings.highlightAffectedByLight));
+		this.buttonList.add(blinkSelectionBox = new GuiToggleButton(18, this.width / 2 - 100, 180, 150, 20, "Blink Block Highlight: ", BlockHighlightSettings.highlightBlink));
+		this.buttonList.add(blinkTimerSlider = new GuiSlider(19, "Blink Time", this.width / 2 - 100, 205, 50, 3000, BlockHighlightSettings.highlightBlinkSpeed, 50));
 	}
 
 	@Override
@@ -123,8 +127,13 @@ public class ConfigGui extends GuiScreen
 			{
 				BlockHighlightSettings.highlightBlockFaces = this.highlightBlockFaces.isToggledOn();
 			}
+			else if(button.id == 18)
+			{
+				BlockHighlightSettings.highlightBlink = this.blinkSelectionBox.isToggledOn();
+			}
 
-			BlockHighlighterConfigLoader.saveBlockHighlightSettings(boxOutlineColorSelelection, boxFillColorSelelection, thicknessSlider.getValueAdjusted(10.0F));
+			BlockHighlightSettings.highlightBlinkSpeed = this.blinkTimerSlider.getValueAdjusted();
+			BlockHighlighterConfigLoader.saveBlockHighlightSettings(boxOutlineColorSelelection, boxFillColorSelelection, thicknessSlider.getValueAdjusted());
 		}
 	}
 }

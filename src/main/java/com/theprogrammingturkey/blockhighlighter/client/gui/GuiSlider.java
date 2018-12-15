@@ -118,9 +118,10 @@ public class GuiSlider extends GuiButton
 		return this.sliderValue;
 	}
 
-	public int getValueAdjusted(float adjust)
+	public int getValueAdjusted()
 	{
-		return (int) (this.sliderValue * adjust);
+		float displayValue = MathHelper.clamp(this.sliderValue, 0F, 1F);
+		return (int) this.denormalizeValue(displayValue);
 	}
 
 	public void setValue(float value)

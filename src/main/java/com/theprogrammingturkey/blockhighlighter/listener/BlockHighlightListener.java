@@ -16,7 +16,9 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
 public class BlockHighlightListener
 {
-
+	private static boolean blink = false;
+	private static long blinkTimer = 0;
+	
 	@SubscribeEvent
 	public void onBlockOutlineRender(DrawBlockHighlightEvent e)
 	{
@@ -28,9 +30,21 @@ public class BlockHighlightListener
 
 	public void drawSelectionBox(EntityPlayer player, RayTraceResult movingObjectPositionIn, int execute, float partialTicks)
 	{
+		if(BlockHighlightSettings.highlightBlink)
+		{
+			if(System.currentTimeMillis() - blinkTimer > BlockHighlightSettings.highlightBlinkSpeed)
+			{
+				blinkTimer = System.currentTimeMillis();
+				blink = !blink;
+			}
+			if(!blink)
+				return;
+		}
+		
 		World theWorld = player.getEntityWorld();
 		if(execute == 0 && movingObjectPositionIn.typeOfHit == RayTraceResult.Type.BLOCK)
 		{
+			GlStateManager.pushMatrix();
 			GlStateManager.enableBlend();
 			GlStateManager.tryBlendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA, GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ZERO);
 			GlStateManager.glLineWidth(BlockHighlightSettings.highlightLineThickness);
@@ -109,6 +123,7 @@ public class BlockHighlightListener
 			GlStateManager.depthMask(true);
 			GlStateManager.enableTexture2D();
 			GlStateManager.disableBlend();
+			GlStateManager.popMatrix();
 		}
 	}
 }

@@ -17,6 +17,8 @@ public class BlockHighlighterConfigLoader
 	public static final String defaultHighlight = "include Default Highlight";
 	public static final String dimHighlight = "highlight Affected By Light";
 	public static final String faceHighlight = "Highlight Block Faces";
+	public static final String blink = "Blink Highlight";
+	public static final String blinkSpeed = "Blink Highlight Speed";
 	public static final String customHighlight = "Highlight Block Edges With Custom Color";
 
 	public static final String redAmount = "Red amount";
@@ -48,6 +50,8 @@ public class BlockHighlighterConfigLoader
 		BlockHighlightSettings.highlightAffectedByLight = config.getBoolean(dimHighlight, bhCat, false, "Set to true for the block highlight to dim to match the blocks light level");
 		BlockHighlightSettings.highlightBlockFaces = config.getBoolean(faceHighlight, bhCat, false, "Set to true for block faces to be highlighted aswell");
 		BlockHighlightSettings.customHighlight = config.getBoolean(customHighlight, bhCat, false, "Set to true for block edges to be highlighted with a custom color");
+		BlockHighlightSettings.highlightBlink = config.getBoolean(blink, bhCat, false, "Set to true to make the block highlight blink.");
+		BlockHighlightSettings.highlightBlinkSpeed = config.getInt(blinkSpeed, bhCat, 200, 50, 3000, "Timer for the block highlight blink (in miliseconds).");
 
 		config.save();
 	}
@@ -103,6 +107,12 @@ public class BlockHighlighterConfigLoader
 
 		prop = config.get(bhCat, customHighlight, false);
 		prop.set(BlockHighlightSettings.customHighlight);
+		
+		prop = config.get(bhCat, blink, false);
+		prop.set(BlockHighlightSettings.highlightBlink);
+		
+		prop = config.get(bhCat, blinkSpeed, 1000);
+		prop.set(BlockHighlightSettings.highlightBlinkSpeed);
 
 		config.save();
 	}

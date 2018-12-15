@@ -15,4 +15,6 @@ public class BlockHighlightSettings
 	public static float highlightLineThickness = 2.0F;
 	public static boolean highlightAffectedByLight = true;
 	public static boolean highlightBlockFaces = true;
+	public static boolean highlightBlink = true;
+	public static int highlightBlinkSpeed = 1;
 }
