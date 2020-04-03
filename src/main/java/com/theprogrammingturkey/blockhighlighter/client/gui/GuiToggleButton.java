@@ -1,41 +1,27 @@
 package com.theprogrammingturkey.blockhighlighter.client.gui;
 
-import com.theprogrammingturkey.blockhighlighter.config.BlockHighlightSettings;
+import net.minecraft.client.gui.widget.button.Button;
+import net.minecraftforge.common.ForgeConfigSpec.BooleanValue;
 
-import net.minecraft.client.gui.GuiButton;
-
-public class GuiToggleButton extends GuiButton
+public class GuiToggleButton extends Button
 {
-	private boolean toggle;
+	private BooleanValue toggle;
 	private String baseDisplay;
 
-	public GuiToggleButton(int buttonId, int x, int y, int widthIn, int heightIn, String display, boolean enabled)
+	public GuiToggleButton(int x, int y, int widthIn, int heightIn, String display, BooleanValue enabled)
 	{
-		super(buttonId, x, y, widthIn, heightIn, display + (enabled ? "On" : "Off"));
+		super(x, y, widthIn, heightIn, display + (enabled.get() ? "On" : "Off"), press ->
+		{
+		});
 		this.baseDisplay = display;
 		this.toggle = enabled;
 	}
 
-	public void onClick(double mouseX, double mouseY)
+	@Override
+	public void onPress()
 	{
-		toggle = !toggle;
-		displayString = baseDisplay + (toggle ? "On" : "Off");
+		toggle.set(!toggle.get());
 
-		/*if(id == 10)
-			BlockHighlightSettings.customHighlight = this.isToggledOn();
-		else if(id == 15)
-			BlockHighlightSettings.includeDefaultHighlight = this.isToggledOn();
-		else if(id == 16)
-			BlockHighlightSettings.highlightAffectedByLight = this.isToggledOn();
-		else if(id == 17)
-			BlockHighlightSettings.highlightBlockFaces = this.isToggledOn();
-		else if(id == 18)
-			BlockHighlightSettings.highlightBlink = this.isToggledOn();*/
+		setMessage(baseDisplay + (toggle.get() ? "On" : "Off"));
 	}
-
-	public boolean isToggledOn()
-	{
-		return this.toggle;
-	}
-
 }

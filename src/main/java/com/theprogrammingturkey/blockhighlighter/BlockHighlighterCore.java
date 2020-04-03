@@ -25,10 +25,6 @@ public class BlockHighlighterCore
 	{
 		MinecraftForge.EVENT_BUS.register(new BlockHighlightListener());
 		ModLoadingContext.get().registerConfig(ModConfig.Type.CLIENT, BHConfigLoader.configSpec);
-		ModLoadingContext.get().registerExtensionPoint(ExtensionPoint.GUIFACTORY, () -> {
-			return (container) -> {
-				return new ConfigGui();
-			};
-		});
+		ModLoadingContext.get().registerExtensionPoint(ExtensionPoint.CONFIGGUIFACTORY, () -> (mc, parent) -> new ConfigGui());
 	}
 }

@@ -1,7 +1,7 @@
 package com.theprogrammingturkey.blockhighlighter.util;
 
+import com.mojang.blaze3d.platform.GlStateManager;
 import net.minecraft.client.renderer.BufferBuilder;
-import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 
@@ -17,7 +17,7 @@ public class RendererHelper
 		float f5 = (float) (endColor >> 16 & 255) / 255.0F;
 		float f6 = (float) (endColor >> 8 & 255) / 255.0F;
 		float f7 = (float) (endColor & 255) / 255.0F;
-		GlStateManager.disableTexture2D();
+		GlStateManager.disableTexture();
 		GlStateManager.enableBlend();
 		GlStateManager.disableAlphaTest();
 		GlStateManager.blendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA, GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ZERO);
@@ -25,14 +25,14 @@ public class RendererHelper
 		Tessellator tessellator = Tessellator.getInstance();
 		BufferBuilder bufferbuilder = tessellator.getBuffer();
 		bufferbuilder.begin(7, DefaultVertexFormats.POSITION_COLOR);
-		bufferbuilder.pos((double) right, (double) top, 0d).color(f1, f2, f3, f).endVertex();
-		bufferbuilder.pos((double) left, (double) top, 0d).color(f1, f2, f3, f).endVertex();
-		bufferbuilder.pos((double) left, (double) bottom, 0d).color(f5, f6, f7, f4).endVertex();
-		bufferbuilder.pos((double) right, (double) bottom, 0d).color(f5, f6, f7, f4).endVertex();
+		bufferbuilder.pos(right, top, 0d).color(f1, f2, f3, f).endVertex();
+		bufferbuilder.pos(left, top, 0d).color(f1, f2, f3, f).endVertex();
+		bufferbuilder.pos(left, bottom, 0d).color(f5, f6, f7, f4).endVertex();
+		bufferbuilder.pos(right, bottom, 0d).color(f5, f6, f7, f4).endVertex();
 		tessellator.draw();
 		GlStateManager.shadeModel(7424);
 		GlStateManager.disableBlend();
 		GlStateManager.enableAlphaTest();
-		GlStateManager.enableTexture2D();
+		GlStateManager.enableTexture();
 	}
 }

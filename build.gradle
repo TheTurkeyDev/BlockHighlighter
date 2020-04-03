@@ -12,53 +12,70 @@ apply plugin: 'net.minecraftforge.gradle'
 // Only edit below this line, the above code adds and enables the necessary things for Forge to be setup.
 apply plugin: 'eclipse'
 
-version = "1.13.2-1.2"
+ext.buildnumber = 0
+if (System.getenv('BUILD_NUMBER') != null)
+    project.buildnumber = System.getenv('BUILD_NUMBER')
+else
+    logger.lifecycle "No build number detected, setting to 0"
+version= "${mc_version}-${mod_version}.${buildnumber}"
 group = "com.theprogrammingturkey.blockhighlighter"
 archivesBaseName = "blockhighlighter"
 
 sourceCompatibility = targetCompatibility = compileJava.sourceCompatibility = compileJava.targetCompatibility = '1.8' // Need this here so eclipse task generates correctly.
 
 minecraft {
-    // The mappings can be changed at any time, and must be in the following format.
-    // snapshot_YYYYMMDD   Snapshot are built nightly.
-    // stable_#            Stables are built at the discretion of the MCP team.
-    // Use non-default mappings at your own risk. they may not always work.
-    // Simply re-run your setup task after changing the mappings to update your workspace.
-    mappings channel: 'snapshot', version: '20180921-1.13'
-    // makeObfSourceJar = false // an Srg named sources jar is made by default. uncomment this to disable.
-    
-    // accessTransformer = file('build/resources/main/META-INF/accesstransformer.cfg')
+    mappings channel: 'snapshot', version: '20190719-1.14.3'
 
-    // Default run configurations.
-    // These can be tweaked, removed, or duplicated as needed.
+    //accessTransformer = file('my_at.cfg')
+
+    // default run configurations.
+    // these can be tweaked, removed, or duplicated as needed.
     runs {
         client {
-            workingDirectory project.file('run')
+            workingDirectory project.file('run-1.14')
 
             // Recommended logging data for a userdev environment
-            property 'forge.logging.markers', 'SCAN'
+            property 'forge.logging.markers', ''
 
             // Recommended logging level for the console
-            property 'forge.logging.console.level', 'debug'
+            property 'forge.logging.console.level', 'info'
 
             mods {
-                blockhighlighter {
+                chancecubes {
                     source sourceSets.main
                 }
             }
         }
 
         server {
-            workingDirectory project.file('run')
+            workingDirectory project.file('run-server-1.14')
 
             // Recommended logging data for a userdev environment
-            property 'forge.logging.markers', 'SCAN'
+            property 'forge.logging.markers', ''
 
             // Recommended logging level for the console
-            property 'forge.logging.console.level', 'debug'
+            property 'forge.logging.console.level', 'info'
 
             mods {
-                blockhighlighter {
+                chancecubes {
+                    source sourceSets.main
+                }
+            }
+        }
+
+        data {
+            workingDirectory project.file('run-data-1.14')
+
+            // Recommended logging data for a userdev environment
+            property 'forge.logging.markers', ''
+
+            // Recommended logging level for the console
+            property 'forge.logging.console.level', 'info'
+
+            args '--mod', 'blockhighlighter', '--all', '--output', file('src/generated/resources/')
+
+            mods {
+                chancecubes {
                     source sourceSets.main
                 }
             }
@@ -76,7 +93,7 @@ jar {
         attributes([
             "Specification-Title": "blockhighlighter",
             "Specification-Vendor": "turkey2349",
-            "Specification-Version": "1", // We are version 1 of ourselves
+            "Specification-Version": "24.0", // We are version 1 of ourselves
             "Implementation-Title": project.name,
             "Implementation-Version": "${version}",
             "Implementation-Vendor" :"turkey2349",

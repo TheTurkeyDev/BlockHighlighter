@@ -1,16 +1,21 @@
 package com.theprogrammingturkey.blockhighlighter.client.gui;
 
+import com.theprogrammingturkey.blockhighlighter.config.BHConfigLoader;
 import com.theprogrammingturkey.blockhighlighter.config.BlockHighlightSettings;
+import net.minecraft.client.gui.screen.Screen;
+import net.minecraft.client.gui.widget.button.Button;
+import net.minecraft.util.text.StringTextComponent;
+import net.minecraftforge.fml.client.config.GuiSlider;
 
-import net.minecraft.client.gui.GuiButton;
-import net.minecraft.client.gui.GuiScreen;
+import java.util.ArrayList;
+import java.util.List;
 
-public class ConfigGui extends GuiScreen
+public class ConfigGui extends Screen
 {
 	private GuiColorSelection boxOutlineColorSelelection;
 	private GuiColorSelection boxFillColorSelelection;
 	private GuiToggleButton customSelectionBox;
-	private GuiButton blockSelectionColors;
+	private Button blockSelectionColors;
 	private GuiSlider thicknessSlider;
 	private GuiToggleButton useDefaultBox;
 	private GuiToggleButton highlightAffectedByLight;
@@ -22,71 +27,77 @@ public class ConfigGui extends GuiScreen
 
 	public ConfigGui()
 	{
+		super(new StringTextComponent("Block Highlighter Config"));
 	}
 
-	public void initGui()
+	public void init()
 	{
-		this.buttons.clear();
-
-		this.buttons.add(new GuiButton(100, this.width / 2 - 100, this.height - 25, 200, 20, "Back")
+		super.init();
+		addButton(new Button(this.width / 2 - 75, this.height - 25, 150, 20, "Back", button ->
 		{
-			public void onClick(double mouseX, double mouseY)
+			if(editingColor)
 			{
-				if(editingColor)
-				{
-					editingColor = false;
-					boxFillColorSelelection.setVisible(false);
-					boxOutlineColorSelelection.setVisible(false);
-					customSelectionBox.visible = true;
-					blockSelectionColors.visible = true;
-					thicknessSlider.visible = true;
-					useDefaultBox.visible = true;
-					highlightAffectedByLight.visible = true;
-					highlightBlockFaces.visible = true;
-					blinkSelectionBox.visible = true;
-					blinkTimerSlider.visible = true;
-				}
+				editingColor = false;
+				boxFillColorSelelection.setVisible(false);
+				boxOutlineColorSelelection.setVisible(false);
+				customSelectionBox.visible = true;
+				blockSelectionColors.visible = true;
+				thicknessSlider.visible = true;
+				useDefaultBox.visible = true;
+				highlightAffectedByLight.visible = true;
+				highlightBlockFaces.visible = true;
+				blinkSelectionBox.visible = true;
+				blinkTimerSlider.visible = true;
 			}
-		});
+			else
+			{
+				onClose();
+			}
+		}));
 
-		boxOutlineColorSelelection = new GuiColorSelection("Block Highlight Outline", this.buttons, this.width / 2 - 100, 30);
+		List<Button> buttonsToAdd = new ArrayList<>();
+		boxOutlineColorSelelection = new GuiColorSelection("Block Highlight Outline", buttonsToAdd, this.width / 2 - 100, 30);
 		boxOutlineColorSelelection.setCurrentValues(BlockHighlightSettings.highlightColorR.get(), BlockHighlightSettings.highlightColorG.get(), BlockHighlightSettings.highlightColorB.get(), BlockHighlightSettings.highlightColorA.get());
 		boxOutlineColorSelelection.setVisible(false);
-		boxFillColorSelelection = new GuiColorSelection("Block Highlight Fill", this.buttons, this.width / 2 - 100, 150);
+		boxFillColorSelelection = new GuiColorSelection("Block Highlight Fill", buttonsToAdd, this.width / 2 - 100, 150);
 		boxFillColorSelelection.setCurrentValues(BlockHighlightSettings.fillColorR.get(), BlockHighlightSettings.fillColorG.get(), BlockHighlightSettings.fillColorB.get(), BlockHighlightSettings.fillColorA.get());
 		boxFillColorSelelection.setVisible(false);
+		for(Button b : buttonsToAdd)
+			addButton(b);
 
-		this.buttons.add(useDefaultBox = new GuiToggleButton(15, this.width / 2 - 100, 30, 150, 20, "Vanilla selection box: ", BlockHighlightSettings.includeDefaultHighlight.get()));
-		this.buttons.add(customSelectionBox = new GuiToggleButton(10, this.width / 2 - 100, 55, 150, 20, "Custom Selection Box: ", BlockHighlightSettings.customHighlight.get()));
-		this.buttons.add(highlightBlockFaces = new GuiToggleButton(17, this.width / 2 - 100, 80, 150, 20, "Highlight Block Faces: ", BlockHighlightSettings.highlightBlockFaces.get()));
-		this.buttons.add(blockSelectionColors = new GuiButton(11, this.width / 2 - 100, 105, 150, 20, "Set Colors")
+		addButton(useDefaultBox = new GuiToggleButton(this.width / 2 - 100, 30, 150, 20, "Vanilla selection box: ", BlockHighlightSettings.includeDefaultHighlight));
+		addButton(customSelectionBox = new GuiToggleButton(this.width / 2 - 100, 55, 150, 20, "Custom Selection Box: ", BlockHighlightSettings.customHighlight));
+		addButton(highlightBlockFaces = new GuiToggleButton(this.width / 2 - 100, 80, 150, 20, "Highlight Block Faces: ", BlockHighlightSettings.highlightBlockFaces));
+		addButton(blockSelectionColors = new Button(this.width / 2 - 100, 105, 150, 20, "Set Colors", click ->
 		{
-			public void onClick(double mouseX, double mouseY)
-			{
-				editingColor = true;
-				boxFillColorSelelection.setVisible(true);
-				boxOutlineColorSelelection.setVisible(true);
-				customSelectionBox.visible = false;
-				blockSelectionColors.visible = false;
-				thicknessSlider.visible = false;
-				useDefaultBox.visible = false;
-				highlightAffectedByLight.visible = false;
-				highlightBlockFaces.visible = false;
-				blinkSelectionBox.visible = false;
-				blinkTimerSlider.visible = false;
-			}
-		});
-		this.buttons.add(thicknessSlider = new GuiSlider(14, "Thickness", this.width / 2 - 100, 130, 1F, 10F, BlockHighlightSettings.highlightLineThickness.get().floatValue(), 0.5F));
-		this.buttons.add(highlightAffectedByLight = new GuiToggleButton(16, this.width / 2 - 100, 155, 150, 20, "Dim with light levels: ", BlockHighlightSettings.highlightAffectedByLight.get()));
-		this.buttons.add(blinkSelectionBox = new GuiToggleButton(18, this.width / 2 - 100, 180, 150, 20, "Blink Block Highlight: ", BlockHighlightSettings.highlightBlink.get()));
-		this.buttons.add(blinkTimerSlider = new GuiSlider(19, "Blink Time", this.width / 2 - 100, 205, 50, 3000, BlockHighlightSettings.highlightBlinkSpeed.get(), 50));
+			editingColor = true;
+			boxFillColorSelelection.setVisible(true);
+			boxOutlineColorSelelection.setVisible(true);
+			customSelectionBox.visible = false;
+			blockSelectionColors.visible = false;
+			thicknessSlider.visible = false;
+			useDefaultBox.visible = false;
+			highlightAffectedByLight.visible = false;
+			highlightBlockFaces.visible = false;
+			blinkSelectionBox.visible = false;
+			blinkTimerSlider.visible = false;
+		}));
+
+		addButton(thicknessSlider = new GuiSlider(this.width / 2 - 100, 130, "Thickness ", 1F, 10F, BlockHighlightSettings.highlightLineThickness.get().floatValue(), click ->
+		{
+		}, null));
+		addButton(highlightAffectedByLight = new GuiToggleButton(this.width / 2 - 100, 155, 150, 20, "Dim with light levels: ", BlockHighlightSettings.highlightAffectedByLight));
+		addButton(blinkSelectionBox = new GuiToggleButton(this.width / 2 - 100, 180, 150, 20, "Blink Block Highlight: ", BlockHighlightSettings.highlightBlink));
+		addButton(blinkTimerSlider = new GuiSlider(this.width / 2 - 100, 205, "Blink Time ", 50, 3000, BlockHighlightSettings.highlightBlinkSpeed.get(), click ->
+		{
+		}, null));
 	}
 
 	@Override
-	public void tick()
+	public void render(int p_render_1_, int p_render_2_, float p_render_3_)
 	{
-		this.drawDefaultBackground();
-		super.tick();
+		this.renderBackground();
+		super.render(p_render_1_, p_render_2_, p_render_3_);
 
 		if(editingColor)
 		{
@@ -94,12 +105,13 @@ public class ConfigGui extends GuiScreen
 			this.boxFillColorSelelection.drawScreen();
 		}
 
-		//BlockHighlightSettings.highlightBlinkSpeed = this.blinkTimerSlider.getValueAdjusted(1);
+		BlockHighlightSettings.highlightBlinkSpeed.set(this.blinkTimerSlider.getValueInt());
 	}
 
 	@Override
-	public void onGuiClosed()
+	public void onClose()
 	{
-		//BlockHighlighterConfigLoader.saveBlockHighlightSettings(boxOutlineColorSelelection, boxFillColorSelelection, thicknessSlider.getValueAdjusted(1));
+		BHConfigLoader.saveBlockHighlightSettings(boxOutlineColorSelelection, boxFillColorSelelection, thicknessSlider.getValue());
+		super.onClose();
 	}
 }

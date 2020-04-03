@@ -1,15 +1,21 @@
 package com.theprogrammingturkey.blockhighlighter.listener;
 
+import com.mojang.blaze3d.platform.GlStateManager;
 import com.theprogrammingturkey.blockhighlighter.config.BlockHighlightSettings;
-
-import net.minecraft.block.material.Material;
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.block.BlockState;
+import net.minecraft.client.renderer.ActiveRenderInfo;
+import net.minecraft.client.renderer.BufferBuilder;
+import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.WorldRenderer;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
+import net.minecraft.entity.Entity;
+import net.minecraft.util.Direction;
+import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.BlockRayTraceResult;
 import net.minecraft.util.math.RayTraceResult;
-import net.minecraft.world.EnumLightType;
+import net.minecraft.util.math.shapes.ISelectionContext;
+import net.minecraft.world.LightType;
 import net.minecraft.world.World;
 import net.minecraftforge.client.event.DrawBlockHighlightEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -25,12 +31,12 @@ public class BlockHighlightListener
 	public void onBlockOutlineRender(DrawBlockHighlightEvent e)
 	{
 		if(BlockHighlightSettings.highlightBlockFaces.get() || BlockHighlightSettings.customHighlight.get())
-			this.drawSelectionBox(e.getPlayer(), e.getTarget(), e.getSubID(), e.getPartialTicks());
+			this.drawSelectionBox(e.getInfo().getRenderViewEntity(), e.getInfo(), e.getTarget(), e.getSubID(), e.getPartialTicks());
 		if(!BlockHighlightSettings.includeDefaultHighlight.get())
 			e.setCanceled(true);
 	}
 
-	public void drawSelectionBox(EntityPlayer player, RayTraceResult movingObjectPositionIn, int execute, float partialTicks)
+	public void drawSelectionBox(Entity entity, ActiveRenderInfo renderInfo, RayTraceResult movingObjectPositionIn, int execute, float partialTicks)
 	{
 		if(BlockHighlightSettings.highlightBlink.get())
 		{
@@ -43,23 +49,26 @@ public class BlockHighlightListener
 				return;
 		}
 
-		World theWorld = player.getEntityWorld();
-		if(execute == 0 && movingObjectPositionIn.type == RayTraceResult.Type.BLOCK)
+		World theWorld = entity.getEntityWorld();
+		if(execute == 0 && movingObjectPositionIn.getType() == RayTraceResult.Type.BLOCK)
 		{
-			GlStateManager.pushMatrix();
-			GlStateManager.enableBlend();
-			GlStateManager.blendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA, GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ZERO);
-			GlStateManager.lineWidth(BlockHighlightSettings.highlightLineThickness.get().floatValue());
-			GlStateManager.disableTexture2D();
-			GlStateManager.depthMask(false);
-			BlockPos blockpos = movingObjectPositionIn.getBlockPos();
-			IBlockState iblockstate = theWorld.getBlockState(blockpos);
-
-			if(iblockstate.getMaterial() != Material.AIR && theWorld.getWorldBorder().contains(blockpos))
+			BlockPos blockpos = ((BlockRayTraceResult) movingObjectPositionIn).getPos();
+			BlockState blockstate = theWorld.getBlockState(blockpos);
+			if(!blockstate.isAir(theWorld, blockpos) && theWorld.getWorldBorder().contains(blockpos))
 			{
-				double d0 = player.lastTickPosX + (player.posX - player.lastTickPosX) * (double) partialTicks;
-				double d1 = player.lastTickPosY + (player.posY - player.lastTickPosY) * (double) partialTicks;
-				double d2 = player.lastTickPosZ + (player.posZ - player.lastTickPosZ) * (double) partialTicks;
+				GlStateManager.pushMatrix();
+				GlStateManager.enableBlend();
+				GlStateManager.blendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA, GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ZERO);
+				GlStateManager.lineWidth(BlockHighlightSettings.highlightLineThickness.get().floatValue());
+				GlStateManager.disableTexture();
+				GlStateManager.depthMask(false);
+				GlStateManager.matrixMode(5889);
+				GlStateManager.pushMatrix();
+				GlStateManager.scalef(1.0F, 1.0F, 0.999F);
+
+				double d0 = renderInfo.getProjectedView().x;
+				double d1 = renderInfo.getProjectedView().y;
+				double d2 = renderInfo.getProjectedView().z;
 				float redAmountHighlight = BlockHighlightSettings.highlightColorR.get().floatValue();
 				float greenAmountHighlight = BlockHighlightSettings.highlightColorG.get().floatValue();
 				float blueAmountHighlight = BlockHighlightSettings.highlightColorB.get().floatValue();
@@ -68,12 +77,11 @@ public class BlockHighlightListener
 				float greenAmountFill = BlockHighlightSettings.fillColorG.get().floatValue();
 				float blueAmountFill = BlockHighlightSettings.fillColorB.get().floatValue();
 				float alphaAmountFill = BlockHighlightSettings.fillColorA.get().floatValue();
-				
+
 				if(BlockHighlightSettings.highlightAffectedByLight.get())
 				{
 					BlockPos lightCheckPos;
-
-					switch(movingObjectPositionIn.sideHit)
+					switch(Direction.byIndex(movingObjectPositionIn.subHit))
 					{
 						case DOWN:
 							lightCheckPos = blockpos.add(0, -1, 0);
@@ -98,10 +106,10 @@ public class BlockHighlightListener
 							break;
 					}
 
-					int blockLight = theWorld.getLightFor(EnumLightType.BLOCK, lightCheckPos);
-					int skyLight = theWorld.getLightFor(EnumLightType.SKY, lightCheckPos) - theWorld.getSkylightSubtracted();
-					float light = (float) (blockLight > skyLight ? blockLight : skyLight) / 15f;
-					light = light < 0.5f ? 0.5f : light;
+					int blockLight = theWorld.getLightFor(LightType.BLOCK, lightCheckPos);
+					int skyLight = theWorld.getLightFor(LightType.SKY, lightCheckPos) - theWorld.getSkylightSubtracted();
+					float light = (float) (Math.max(blockLight, skyLight)) / 15f;
+					light = Math.max(light, 0.5f);
 					if(light > 0)
 					{
 						redAmountHighlight *= light;
@@ -115,18 +123,27 @@ public class BlockHighlightListener
 					}
 				}
 
-				
+
 				if(BlockHighlightSettings.highlightBlockFaces.get())
-					WorldRenderer.renderFilledBox(iblockstate.getRenderShape(theWorld, blockpos).getBoundingBox().expand(0.002, 0.002, 0.002).offset(d0, d1, d2), redAmountFill, greenAmountFill, blueAmountFill, alphaAmountFill);
+				{
+					Tessellator tessellator = Tessellator.getInstance();
+					BufferBuilder bufferbuilder = tessellator.getBuffer();
+					bufferbuilder.begin(1, DefaultVertexFormats.POSITION_COLOR);
+					AxisAlignedBB vox = blockstate.getRenderShape(theWorld, blockpos).getBoundingBox().expand(0.002, 0.002, 0.002).offset(d0, d1, d2);
+					WorldRenderer.addChainedFilledBoxVertices(bufferbuilder, vox.minX, vox.minY, vox.minZ, vox.maxX, vox.maxY, vox.maxZ, redAmountFill, greenAmountFill, blueAmountFill, alphaAmountFill);
+					tessellator.draw();
+				}
 
 				if(BlockHighlightSettings.customHighlight.get())
-					WorldRenderer.drawShape(iblockstate.getShape(theWorld, blockpos), (double)blockpos.getX() - d0, (double)blockpos.getY() - d1, (double)blockpos.getZ() - d2, redAmountHighlight, greenAmountHighlight, blueAmountHighlight, alphaAmountHighlight);
-			}
+					WorldRenderer.drawShape(blockstate.getShape(theWorld, blockpos, ISelectionContext.forEntity(entity)), (double) blockpos.getX() - d0, (double) blockpos.getY() - d1, (double) blockpos.getZ() - d2, redAmountHighlight, greenAmountHighlight, blueAmountHighlight, alphaAmountHighlight);
 
-			GlStateManager.depthMask(true);
-			GlStateManager.enableTexture2D();
-			GlStateManager.disableBlend();
-			GlStateManager.popMatrix();
+				GlStateManager.popMatrix();
+				GlStateManager.matrixMode(5888);
+				GlStateManager.depthMask(true);
+				GlStateManager.enableTexture();
+				GlStateManager.disableBlend();
+				GlStateManager.popMatrix();
+			}
 		}
 	}
 }

@@ -1,13 +1,14 @@
 package com.theprogrammingturkey.blockhighlighter.config;
 
-import org.apache.commons.lang3.tuple.Pair;
-
+import com.theprogrammingturkey.blockhighlighter.client.gui.GuiColorSelection;
 import net.minecraftforge.common.ForgeConfigSpec;
+import org.apache.commons.lang3.tuple.Pair;
 
 public class BHConfigLoader
 {
 	public static final ForgeConfigSpec configSpec;
 	public static final BHConfigLoader CONFIG;
+
 	static
 	{
 		final Pair<BHConfigLoader, ForgeConfigSpec> specPair = new ForgeConfigSpec.Builder().configure(BHConfigLoader::new);
@@ -90,54 +91,18 @@ public class BHConfigLoader
 		// @formatter:on
 	}
 
-	/*
-	 * public static void saveBlockHighlightSettings(GuiColorSelection outline, GuiColorSelection
-	 * fill, float thickness) { config.load();
-	 * 
-	 * Property prop = config.get(bhCat, defaultHighlight, true);
-	 * prop.set(BlockHighlightSettings.includeDefaultHighlight);
-	 * 
-	 * prop = config.get(bhCat, "Outline " + redAmount, 0F); prop.set(outline.getFloatRed());
-	 * BlockHighlightSettings.highlightColorR = outline.getFloatRed();
-	 * 
-	 * prop = config.get(bhCat, "Outline " + greenAmount, 0F); prop.set(outline.getFloatGreen());
-	 * BlockHighlightSettings.highlightColorG = outline.getFloatGreen();
-	 * 
-	 * prop = config.get(bhCat, "Outline " + blueAmount, 0F); prop.set(outline.getFloatBlue());
-	 * BlockHighlightSettings.highlightColorB = outline.getFloatBlue();
-	 * 
-	 * prop = config.get(bhCat, "Outline " + alphaAmount, 1F); prop.set(outline.getFloatAlpha());
-	 * BlockHighlightSettings.highlightColorA = outline.getFloatAlpha();
-	 * 
-	 * prop = config.get(bhCat, "Fill " + redAmount, 0F); prop.set(fill.getFloatRed());
-	 * BlockHighlightSettings.fillColorR = fill.getFloatRed();
-	 * 
-	 * prop = config.get(bhCat, "Fill " + greenAmount, 0F); prop.set(fill.getFloatGreen());
-	 * BlockHighlightSettings.fillColorG = fill.getFloatGreen();
-	 * 
-	 * prop = config.get(bhCat, "Fill " + blueAmount, 0F); prop.set(fill.getFloatBlue());
-	 * BlockHighlightSettings.fillColorB = fill.getFloatBlue();
-	 * 
-	 * prop = config.get(bhCat, "Fill " + alphaAmount, 1F); prop.set(fill.getFloatAlpha());
-	 * BlockHighlightSettings.fillColorA = fill.getFloatAlpha();
-	 * 
-	 * prop = config.get(bhCat, thicknessAmount, 2F); prop.set(thickness);
-	 * BlockHighlightSettings.highlightLineThickness = thickness;
-	 * 
-	 * prop = config.get(bhCat, dimHighlight, false);
-	 * prop.set(BlockHighlightSettings.highlightAffectedByLight);
-	 * 
-	 * prop = config.get(bhCat, faceHighlight, false);
-	 * prop.set(BlockHighlightSettings.highlightBlockFaces);
-	 * 
-	 * prop = config.get(bhCat, customHighlight, false);
-	 * prop.set(BlockHighlightSettings.customHighlight);
-	 * 
-	 * prop = config.get(bhCat, blink, false); prop.set(BlockHighlightSettings.highlightBlink);
-	 * 
-	 * prop = config.get(bhCat, blinkSpeed, 1000);
-	 * prop.set(BlockHighlightSettings.highlightBlinkSpeed);
-	 * 
-	 * config.save(); }
-	 */
+
+	public static void saveBlockHighlightSettings(GuiColorSelection outline, GuiColorSelection fill, double thickness)
+	{
+		BlockHighlightSettings.highlightColorR.set(outline.getFloatRed());
+		BlockHighlightSettings.highlightColorG.set(outline.getFloatGreen());
+		BlockHighlightSettings.highlightColorB.set(outline.getFloatBlue());
+		BlockHighlightSettings.highlightColorA.set(outline.getFloatAlpha());
+		BlockHighlightSettings.fillColorR.set(fill.getFloatRed());
+		BlockHighlightSettings.fillColorG.set(fill.getFloatGreen());
+		BlockHighlightSettings.fillColorB.set(fill.getFloatBlue());
+		BlockHighlightSettings.fillColorA.set(fill.getFloatAlpha());
+		BlockHighlightSettings.highlightLineThickness.set(thickness);
+	}
+
 }

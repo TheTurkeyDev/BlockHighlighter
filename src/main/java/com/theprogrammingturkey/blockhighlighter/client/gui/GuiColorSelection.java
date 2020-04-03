@@ -1,12 +1,12 @@
 package com.theprogrammingturkey.blockhighlighter.client.gui;
 
-import java.util.List;
-
 import com.theprogrammingturkey.blockhighlighter.util.RendererHelper;
-
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
-import net.minecraft.client.gui.GuiButton;
+import net.minecraft.client.gui.widget.button.Button;
+import net.minecraftforge.fml.client.config.GuiSlider;
+
+import java.util.List;
 
 public class GuiColorSelection
 {
@@ -20,15 +20,23 @@ public class GuiColorSelection
 	private int x;
 	private int y;
 
-	public GuiColorSelection(String disp, List<GuiButton> buttonList, int x, int y)
+	public GuiColorSelection(String disp, List<Button> buttonList, int x, int y)
 	{
 		this.dispLabel = disp;
 		this.x = x;
 		this.y = y;
-		buttonList.add(redSlider = new GuiSlider(1, "Red", x, y, 0F, 1F, 0, 0.01F));
-		buttonList.add(greenSlider = new GuiSlider(2, "Green", x, y + 25, 0F, 1F, 0, 0.01F));
-		buttonList.add(blueSlider = new GuiSlider(3, "Blue", x, y + 50, 0F, 1F, 0, 0.01F));
-		buttonList.add(alphaSlider = new GuiSlider(0, "Alpha", x, y + 75, 0F, 1F, 0, 0.01F));
+		buttonList.add(redSlider = new GuiSlider(x, y, "Red ", 0, 1, 0, press ->
+		{
+		}, null));
+		buttonList.add(greenSlider = new GuiSlider(x, y + 25, "Green ", 0, 1, 0, press ->
+		{
+		}, null));
+		buttonList.add(blueSlider = new GuiSlider(x, y + 50, "Blue ", 0, 1, 0, press ->
+		{
+		}, null));
+		buttonList.add(alphaSlider = new GuiSlider(x, y + 75, "Alpha ", 0, 1, 0, press ->
+		{
+		}, null));
 	}
 
 	public void drawScreen()
@@ -60,46 +68,46 @@ public class GuiColorSelection
 
 	public int getIntColor()
 	{
-		return (alphaSlider.getValueAdjusted(255) << 24) | (redSlider.getValueAdjusted(255) << 16) | (greenSlider.getValueAdjusted(255) << 8) | (blueSlider.getValueAdjusted(255));
+		return (getIntAlpha() << 24) | (getIntRed() << 16) | (getIntGreen() << 8) | (getIntBlue());
 	}
 
-	public float getFloatRed()
+	public double getFloatRed()
 	{
 		return this.redSlider.getValue();
 	}
 
-	public float getFloatGreen()
+	public double getFloatGreen()
 	{
 		return this.greenSlider.getValue();
 	}
 
-	public float getFloatBlue()
+	public double getFloatBlue()
 	{
 		return this.blueSlider.getValue();
 	}
 
-	public float getFloatAlpha()
+	public double getFloatAlpha()
 	{
 		return this.alphaSlider.getValue();
 	}
 
-	public float getIntRed()
+	public int getIntRed()
 	{
-		return this.redSlider.getValueAdjusted(255);
+		return (int) (redSlider.getValue() * 255);
 	}
 
-	public float getIntGreen()
+	public int getIntGreen()
 	{
-		return this.greenSlider.getValueAdjusted(255);
+		return (int) (greenSlider.getValue() * 255);
 	}
 
-	public float getIntBlue()
+	public int getIntBlue()
 	{
-		return this.blueSlider.getValueAdjusted(255);
+		return (int) (blueSlider.getValue() * 255);
 	}
 
-	public float getIntAlpha()
+	public int getIntAlpha()
 	{
-		return this.alphaSlider.getValueAdjusted(255);
+		return (int) (alphaSlider.getValue() * 255);
 	}
 }
