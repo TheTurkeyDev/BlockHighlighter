@@ -13,7 +13,6 @@ import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.config.ModConfig;
 
-//, guiFactory = BlockHighlighterCore.GUIFACTORY, clientSideOnly = true
 @Mod(BlockHighlighterCore.MODID)
 public class BlockHighlighterCore
 {

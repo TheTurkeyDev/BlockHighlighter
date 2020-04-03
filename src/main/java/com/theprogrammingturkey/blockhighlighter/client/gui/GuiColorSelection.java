@@ -4,7 +4,7 @@ import com.theprogrammingturkey.blockhighlighter.util.RendererHelper;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.widget.button.Button;
-import net.minecraftforge.fml.client.config.GuiSlider;
+import net.minecraftforge.fml.client.gui.widget.Slider;
 
 import java.util.List;
 
@@ -12,10 +12,10 @@ public class GuiColorSelection
 {
 	private String dispLabel;
 
-	private GuiSlider redSlider;
-	private GuiSlider greenSlider;
-	private GuiSlider blueSlider;
-	private GuiSlider alphaSlider;
+	private Slider redSlider;
+	private Slider greenSlider;
+	private Slider blueSlider;
+	private Slider alphaSlider;
 
 	private int x;
 	private int y;
@@ -25,16 +25,16 @@ public class GuiColorSelection
 		this.dispLabel = disp;
 		this.x = x;
 		this.y = y;
-		buttonList.add(redSlider = new GuiSlider(x, y, "Red ", 0, 1, 0, press ->
+		buttonList.add(redSlider = new Slider(x, y, "Red ", 0, 1, 0, press ->
 		{
 		}, null));
-		buttonList.add(greenSlider = new GuiSlider(x, y + 25, "Green ", 0, 1, 0, press ->
+		buttonList.add(greenSlider = new Slider(x, y + 25, "Green ", 0, 1, 0, press ->
 		{
 		}, null));
-		buttonList.add(blueSlider = new GuiSlider(x, y + 50, "Blue ", 0, 1, 0, press ->
+		buttonList.add(blueSlider = new Slider(x, y + 50, "Blue ", 0, 1, 0, press ->
 		{
 		}, null));
-		buttonList.add(alphaSlider = new GuiSlider(x, y + 75, "Alpha ", 0, 1, 0, press ->
+		buttonList.add(alphaSlider = new Slider(x, y + 75, "Alpha ", 0, 1, 0, press ->
 		{
 		}, null));
 	}

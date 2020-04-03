@@ -4,7 +4,7 @@ buildscript {
         jcenter()
         mavenCentral()
     }
-     dependencies {
+    dependencies {
         classpath group: 'net.minecraftforge.gradle', name: 'ForgeGradle', version: '3.+', changing: true
     }
 }
@@ -17,14 +17,14 @@ if (System.getenv('BUILD_NUMBER') != null)
     project.buildnumber = System.getenv('BUILD_NUMBER')
 else
     logger.lifecycle "No build number detected, setting to 0"
-version= "${mc_version}-${mod_version}.${buildnumber}"
+version = "${mc_version}-${mod_version}.${buildnumber}"
 group = "com.theprogrammingturkey.blockhighlighter"
 archivesBaseName = "blockhighlighter"
 
 sourceCompatibility = targetCompatibility = compileJava.sourceCompatibility = compileJava.targetCompatibility = '1.8' // Need this here so eclipse task generates correctly.
 
 minecraft {
-    mappings channel: 'snapshot', version: '20190719-1.14.3'
+    mappings channel: 'snapshot', version: '20200225-1.15.1'
 
     //accessTransformer = file('my_at.cfg')
 
@@ -32,7 +32,7 @@ minecraft {
     // these can be tweaked, removed, or duplicated as needed.
     runs {
         client {
-            workingDirectory project.file('run-1.14')
+            workingDirectory project.file('run-1.15')
 
             // Recommended logging data for a userdev environment
             property 'forge.logging.markers', ''
@@ -48,7 +48,7 @@ minecraft {
         }
 
         server {
-            workingDirectory project.file('run-server-1.14')
+            workingDirectory project.file('run-server-1.15')
 
             // Recommended logging data for a userdev environment
             property 'forge.logging.markers', ''
@@ -64,7 +64,7 @@ minecraft {
         }
 
         data {
-            workingDirectory project.file('run-data-1.14')
+            workingDirectory project.file('run-1.15')
 
             // Recommended logging data for a userdev environment
             property 'forge.logging.markers', ''
@@ -91,13 +91,13 @@ dependencies {
 jar {
     manifest {
         attributes([
-            "Specification-Title": "blockhighlighter",
-            "Specification-Vendor": "turkey2349",
-            "Specification-Version": "24.0", // We are version 1 of ourselves
-            "Implementation-Title": project.name,
-            "Implementation-Version": "${version}",
-            "Implementation-Vendor" :"turkey2349",
-            "Implementation-Timestamp": new Date().format("yyyy-MM-dd'T'HH:mm:ssZ")
+                "Specification-Title"     : "blockhighlighter",
+                "Specification-Vendor"    : "turkey2349",
+                "Specification-Version"   : "24.0", // We are version 1 of ourselves
+                "Implementation-Title"    : project.name,
+                "Implementation-Version"  : "${version}",
+                "Implementation-Vendor"   : "turkey2349",
+                "Implementation-Timestamp": new Date().format("yyyy-MM-dd'T'HH:mm:ssZ")
         ])
     }
 }

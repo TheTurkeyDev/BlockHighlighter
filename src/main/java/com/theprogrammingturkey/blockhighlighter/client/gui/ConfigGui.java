@@ -5,7 +5,7 @@ import com.theprogrammingturkey.blockhighlighter.config.BlockHighlightSettings;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.widget.button.Button;
 import net.minecraft.util.text.StringTextComponent;
-import net.minecraftforge.fml.client.config.GuiSlider;
+import net.minecraftforge.fml.client.gui.widget.Slider;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -16,12 +16,12 @@ public class ConfigGui extends Screen
 	private GuiColorSelection boxFillColorSelelection;
 	private GuiToggleButton customSelectionBox;
 	private Button blockSelectionColors;
-	private GuiSlider thicknessSlider;
+	private Slider thicknessSlider;
 	private GuiToggleButton useDefaultBox;
 	private GuiToggleButton highlightAffectedByLight;
 	private GuiToggleButton highlightBlockFaces;
 	private GuiToggleButton blinkSelectionBox;
-	private GuiSlider blinkTimerSlider;
+	private Slider blinkTimerSlider;
 
 	private boolean editingColor = false;
 
@@ -83,12 +83,12 @@ public class ConfigGui extends Screen
 			blinkTimerSlider.visible = false;
 		}));
 
-		addButton(thicknessSlider = new GuiSlider(this.width / 2 - 100, 130, "Thickness ", 1F, 10F, BlockHighlightSettings.highlightLineThickness.get().floatValue(), click ->
+		addButton(thicknessSlider = new Slider(this.width / 2 - 100, 130, "Thickness ", 1F, 10F, BlockHighlightSettings.highlightLineThickness.get().floatValue(), click ->
 		{
 		}, null));
 		addButton(highlightAffectedByLight = new GuiToggleButton(this.width / 2 - 100, 155, 150, 20, "Dim with light levels: ", BlockHighlightSettings.highlightAffectedByLight));
 		addButton(blinkSelectionBox = new GuiToggleButton(this.width / 2 - 100, 180, 150, 20, "Blink Block Highlight: ", BlockHighlightSettings.highlightBlink));
-		addButton(blinkTimerSlider = new GuiSlider(this.width / 2 - 100, 205, "Blink Time ", 50, 3000, BlockHighlightSettings.highlightBlinkSpeed.get(), click ->
+		addButton(blinkTimerSlider = new Slider(this.width / 2 - 100, 205, "Blink Time ", 50, 3000, BlockHighlightSettings.highlightBlinkSpeed.get(), click ->
 		{
 		}, null));
 	}
