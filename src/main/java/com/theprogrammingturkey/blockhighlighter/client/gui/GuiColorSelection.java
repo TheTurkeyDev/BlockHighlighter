@@ -31,9 +31,9 @@ public class GuiColorSelection
 		buttonList.add(alphaSlider = new GuiSlider(0, "Alpha", x, y + 75, 0F, 1F, 0, 0.01F));
 	}
 
-	public void drawScreen(int mouseX, int mouseY, float partialTicks)
+	public void drawScreen()
 	{
-		FontRenderer fr = Minecraft.getMinecraft().fontRenderer;
+		FontRenderer fr = Minecraft.getInstance().fontRenderer;
 		fr.drawStringWithShadow(dispLabel + " Color", x + 160, y + 20, -1);
 		int argb = getIntColor();
 		int gradientX = x + 175;
@@ -42,12 +42,12 @@ public class GuiColorSelection
 		RendererHelper.drawGradientRect(gradientX, gradientY, gradientX + 32, gradientY + 32, argb, argb);
 	}
 
-	public void setCurrentValues(float r, float g, float b, float a)
+	public void setCurrentValues(Double r, Double g, Double b, Double a)
 	{
-		redSlider.setValue(r);
-		greenSlider.setValue(g);
-		blueSlider.setValue(b);
-		alphaSlider.setValue(a);
+		redSlider.setValue(r.floatValue());
+		greenSlider.setValue(g.floatValue());
+		blueSlider.setValue(b.floatValue());
+		alphaSlider.setValue(a.floatValue());
 	}
 
 	public void setVisible(boolean visible)

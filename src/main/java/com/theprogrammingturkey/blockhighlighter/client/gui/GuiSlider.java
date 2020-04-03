@@ -4,10 +4,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.util.math.MathHelper;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 
-@SideOnly(Side.CLIENT)
 public class GuiSlider extends GuiButton
 {
 	private float sliderValue;
@@ -41,7 +38,7 @@ public class GuiSlider extends GuiButton
 	 * Fired when the mouse button is dragged. Equivalent of MouseListener.mouseDragged(MouseEvent
 	 * e).
 	 */
-	protected void mouseDragged(Minecraft mc, int mouseX, int mouseY)
+	protected void renderBg(Minecraft mc, int mouseX, int mouseY)
 	{
 		if(this.visible)
 		{
@@ -56,37 +53,28 @@ public class GuiSlider extends GuiButton
 			}
 
 			mc.getTextureManager().bindTexture(BUTTON_TEXTURES);
-			GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
+			GlStateManager.color4f(1.0F, 1.0F, 1.0F, 1.0F);
 			this.drawTexturedModalRect(this.x + (int) (displayValue * (float) (this.width - 8)), this.y, 0, 66, 4, 20);
 			this.drawTexturedModalRect(this.x + (int) (displayValue * (float) (this.width - 8)) + 4, this.y, 196, 66, 4, 20);
 		}
 	}
 
 	/**
-	 * Returns true if the mouse has been pressed on this control. Equivalent of
-	 * MouseListener.mousePressed(MouseEvent e).
+	 * Called when the left mouse button is pressed over this button. This method is specific to
+	 * GuiButton.
 	 */
-	public boolean mousePressed(Minecraft mc, int mouseX, int mouseY)
+	public final void onClick(double mouseX, double mouseY)
 	{
-		if(super.mousePressed(mc, mouseX, mouseY))
-		{
-			this.sliderValue = (float) (mouseX - (this.x + 4)) / (float) (this.width - 8);
-			this.sliderValue = MathHelper.clamp(this.sliderValue, 0.0F, 1.0F);
-			this.displayString = this.baseDisplay + ": " + this.sliderValue;
-			this.dragging = true;
-			return true;
-		}
-		else
-		{
-			return false;
-		}
+		this.sliderValue = (float) (mouseX - (this.x + 4)) / (float) (this.width - 8);
+		this.sliderValue = MathHelper.clamp(this.sliderValue, 0.0F, 1.0F);
+		this.displayString = this.baseDisplay + ": " + this.sliderValue;
+		this.dragging = true;
 	}
 
 	/**
-	 * Fired when the mouse button is released. Equivalent of MouseListener.mouseReleased(MouseEvent
-	 * e).
+	 * Called when the left mouse button is released. This method is specific to GuiButton.
 	 */
-	public void mouseReleased(int mouseX, int mouseY)
+	public void onRelease(double mouseX, double mouseY)
 	{
 		this.dragging = false;
 	}

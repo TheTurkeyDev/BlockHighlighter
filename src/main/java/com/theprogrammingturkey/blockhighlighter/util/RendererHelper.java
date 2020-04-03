@@ -19,20 +19,20 @@ public class RendererHelper
 		float f7 = (float) (endColor & 255) / 255.0F;
 		GlStateManager.disableTexture2D();
 		GlStateManager.enableBlend();
-		GlStateManager.disableAlpha();
-		GlStateManager.tryBlendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA, GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ZERO);
+		GlStateManager.disableAlphaTest();
+		GlStateManager.blendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA, GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ZERO);
 		GlStateManager.shadeModel(7425);
 		Tessellator tessellator = Tessellator.getInstance();
-		BufferBuilder vertexbuffer = tessellator.getBuffer();
-		vertexbuffer.begin(7, DefaultVertexFormats.POSITION_COLOR);
-		vertexbuffer.pos((double) right, (double) top, 0.0).color(f1, f2, f3, f).endVertex();
-		vertexbuffer.pos((double) left, (double) top, 0.0).color(f1, f2, f3, f).endVertex();
-		vertexbuffer.pos((double) left, (double) bottom, 0.0).color(f5, f6, f7, f4).endVertex();
-		vertexbuffer.pos((double) right, (double) bottom, 0.0).color(f5, f6, f7, f4).endVertex();
+		BufferBuilder bufferbuilder = tessellator.getBuffer();
+		bufferbuilder.begin(7, DefaultVertexFormats.POSITION_COLOR);
+		bufferbuilder.pos((double) right, (double) top, 0d).color(f1, f2, f3, f).endVertex();
+		bufferbuilder.pos((double) left, (double) top, 0d).color(f1, f2, f3, f).endVertex();
+		bufferbuilder.pos((double) left, (double) bottom, 0d).color(f5, f6, f7, f4).endVertex();
+		bufferbuilder.pos((double) right, (double) bottom, 0d).color(f5, f6, f7, f4).endVertex();
 		tessellator.draw();
 		GlStateManager.shadeModel(7424);
 		GlStateManager.disableBlend();
-		GlStateManager.enableAlpha();
+		GlStateManager.enableAlphaTest();
 		GlStateManager.enableTexture2D();
 	}
 }

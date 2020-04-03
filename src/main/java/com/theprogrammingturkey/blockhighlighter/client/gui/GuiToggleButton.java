@@ -1,6 +1,7 @@
 package com.theprogrammingturkey.blockhighlighter.client.gui;
 
-import net.minecraft.client.Minecraft;
+import com.theprogrammingturkey.blockhighlighter.config.BlockHighlightSettings;
+
 import net.minecraft.client.gui.GuiButton;
 
 public class GuiToggleButton extends GuiButton
@@ -15,18 +16,21 @@ public class GuiToggleButton extends GuiButton
 		this.toggle = enabled;
 	}
 
-	public boolean mousePressed(Minecraft mc, int mouseX, int mouseY)
+	public void onClick(double mouseX, double mouseY)
 	{
+		toggle = !toggle;
+		displayString = baseDisplay + (toggle ? "On" : "Off");
 
-		boolean clicked = super.mousePressed(mc, mouseX, mouseY);
-
-		if(clicked)
-		{
-			toggle = !toggle;
-			displayString = baseDisplay + (toggle ? "On" : "Off");
-		}
-
-		return clicked;
+		/*if(id == 10)
+			BlockHighlightSettings.customHighlight = this.isToggledOn();
+		else if(id == 15)
+			BlockHighlightSettings.includeDefaultHighlight = this.isToggledOn();
+		else if(id == 16)
+			BlockHighlightSettings.highlightAffectedByLight = this.isToggledOn();
+		else if(id == 17)
+			BlockHighlightSettings.highlightBlockFaces = this.isToggledOn();
+		else if(id == 18)
+			BlockHighlightSettings.highlightBlink = this.isToggledOn();*/
 	}
 
 	public boolean isToggledOn()
