@@ -1,19 +1,20 @@
 package com.theprogrammingturkey.blockhighlighter.client.gui;
 
-import net.minecraft.client.gui.widget.button.Button;
+import net.minecraft.client.gui.components.AbstractButton;
+import net.minecraft.client.gui.narration.NarrationElementOutput;
+import net.minecraft.network.chat.TextComponent;
 import net.minecraftforge.common.ForgeConfigSpec.BooleanValue;
+import org.jetbrains.annotations.NotNull;
 
-public class GuiToggleButton extends Button
+public class GuiToggleButton extends AbstractButton
 {
-	private BooleanValue toggle;
-	private String baseDisplay;
+	private final BooleanValue toggle;
+	private final TextComponent baseDisplay;
 
-	public GuiToggleButton(int x, int y, int widthIn, int heightIn, String display, BooleanValue enabled)
+	public GuiToggleButton(int x, int y, int widthIn, int heightIn, TextComponent baseDisplay, BooleanValue enabled)
 	{
-		super(x, y, widthIn, heightIn, display + (enabled.get() ? "On" : "Off"), press ->
-		{
-		});
-		this.baseDisplay = display;
+		super(x, y, widthIn, heightIn, baseDisplay.copy().append(enabled.get() ? "On" : "Off"));
+		this.baseDisplay = baseDisplay;
 		this.toggle = enabled;
 	}
 
@@ -21,7 +22,12 @@ public class GuiToggleButton extends Button
 	public void onPress()
 	{
 		toggle.set(!toggle.get());
+		setMessage(baseDisplay.copy().append(toggle.get() ? "On" : "Off"));
+	}
 
-		setMessage(baseDisplay + (toggle.get() ? "On" : "Off"));
+	@Override
+	public void updateNarration(@NotNull NarrationElementOutput output)
+	{
+		//TODO
 	}
 }

@@ -1,14 +1,13 @@
 package com.theprogrammingturkey.blockhighlighter.client.gui;
 
+import com.mojang.blaze3d.vertex.PoseStack;
 import com.theprogrammingturkey.blockhighlighter.config.BHConfigLoader;
 import com.theprogrammingturkey.blockhighlighter.config.BlockHighlightSettings;
-import net.minecraft.client.gui.screen.Screen;
-import net.minecraft.client.gui.widget.button.Button;
-import net.minecraft.util.text.StringTextComponent;
-import net.minecraftforge.fml.client.config.GuiSlider;
-
-import java.util.ArrayList;
-import java.util.List;
+import net.minecraft.client.gui.components.Button;
+import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.network.chat.TextComponent;
+import net.minecraftforge.client.gui.widget.Slider;
+import org.jetbrains.annotations.NotNull;
 
 public class ConfigGui extends Screen
 {
@@ -16,24 +15,24 @@ public class ConfigGui extends Screen
 	private GuiColorSelection boxFillColorSelelection;
 	private GuiToggleButton customSelectionBox;
 	private Button blockSelectionColors;
-	private GuiSlider thicknessSlider;
+	private Slider thicknessSlider;
 	private GuiToggleButton useDefaultBox;
 	private GuiToggleButton highlightAffectedByLight;
 	private GuiToggleButton highlightBlockFaces;
 	private GuiToggleButton blinkSelectionBox;
-	private GuiSlider blinkTimerSlider;
+	private Slider blinkTimerSlider;
 
 	private boolean editingColor = false;
 
 	public ConfigGui()
 	{
-		super(new StringTextComponent("Block Highlighter Config"));
+		super(new TextComponent("Block Highlighter Config"));
 	}
 
 	public void init()
 	{
 		super.init();
-		addButton(new Button(this.width / 2 - 75, this.height - 25, 150, 20, "Back", button ->
+		addWidget(new Button(this.width / 2 - 75, this.height - 25, 150, 20, new TextComponent("Back"), button ->
 		{
 			if(editingColor)
 			{
@@ -55,20 +54,19 @@ public class ConfigGui extends Screen
 			}
 		}));
 
-		List<Button> buttonsToAdd = new ArrayList<>();
-		boxOutlineColorSelelection = new GuiColorSelection("Block Highlight Outline", buttonsToAdd, this.width / 2 - 100, 30);
+		boxOutlineColorSelelection = new GuiColorSelection("Block Highlight Outline", this.width / 2 - 100, 30);
 		boxOutlineColorSelelection.setCurrentValues(BlockHighlightSettings.highlightColorR.get(), BlockHighlightSettings.highlightColorG.get(), BlockHighlightSettings.highlightColorB.get(), BlockHighlightSettings.highlightColorA.get());
 		boxOutlineColorSelelection.setVisible(false);
-		boxFillColorSelelection = new GuiColorSelection("Block Highlight Fill", buttonsToAdd, this.width / 2 - 100, 150);
+		addWidget(boxOutlineColorSelelection);
+		boxFillColorSelelection = new GuiColorSelection("Block Highlight Fill", this.width / 2 - 100, 150);
 		boxFillColorSelelection.setCurrentValues(BlockHighlightSettings.fillColorR.get(), BlockHighlightSettings.fillColorG.get(), BlockHighlightSettings.fillColorB.get(), BlockHighlightSettings.fillColorA.get());
 		boxFillColorSelelection.setVisible(false);
-		for(Button b : buttonsToAdd)
-			addButton(b);
+		addWidget(boxFillColorSelelection);
 
-		addButton(useDefaultBox = new GuiToggleButton(this.width / 2 - 100, 30, 150, 20, "Vanilla selection box: ", BlockHighlightSettings.includeDefaultHighlight));
-		addButton(customSelectionBox = new GuiToggleButton(this.width / 2 - 100, 55, 150, 20, "Custom Selection Box: ", BlockHighlightSettings.customHighlight));
-		addButton(highlightBlockFaces = new GuiToggleButton(this.width / 2 - 100, 80, 150, 20, "Highlight Block Faces: ", BlockHighlightSettings.highlightBlockFaces));
-		addButton(blockSelectionColors = new Button(this.width / 2 - 100, 105, 150, 20, "Set Colors", click ->
+		addWidget(useDefaultBox = new GuiToggleButton(this.width / 2 - 100, 30, 150, 20, new TextComponent("Vanilla selection box: "), BlockHighlightSettings.includeDefaultHighlight));
+		addWidget(customSelectionBox = new GuiToggleButton(this.width / 2 - 100, 55, 150, 20, new TextComponent("Custom Selection Box: "), BlockHighlightSettings.customHighlight));
+		addWidget(highlightBlockFaces = new GuiToggleButton(this.width / 2 - 100, 80, 150, 20, new TextComponent("Highlight Block Faces: "), BlockHighlightSettings.highlightBlockFaces));
+		addWidget(blockSelectionColors = new Button(this.width / 2 - 100, 105, 150, 20, new TextComponent("Set Colors"), click ->
 		{
 			editingColor = true;
 			boxFillColorSelelection.setVisible(true);
@@ -83,27 +81,26 @@ public class ConfigGui extends Screen
 			blinkTimerSlider.visible = false;
 		}));
 
-		addButton(thicknessSlider = new GuiSlider(this.width / 2 - 100, 130, "Thickness ", 1F, 10F, BlockHighlightSettings.highlightLineThickness.get().floatValue(), click ->
+		addWidget(thicknessSlider = new Slider(this.width / 2 - 100, 130, new TextComponent("Thickness "), 1F, 10F, BlockHighlightSettings.highlightLineThickness.get().floatValue(), click ->
 		{
 		}, null));
-		addButton(highlightAffectedByLight = new GuiToggleButton(this.width / 2 - 100, 155, 150, 20, "Dim with light levels: ", BlockHighlightSettings.highlightAffectedByLight));
-		addButton(blinkSelectionBox = new GuiToggleButton(this.width / 2 - 100, 180, 150, 20, "Blink Block Highlight: ", BlockHighlightSettings.highlightBlink));
-		addButton(blinkTimerSlider = new GuiSlider(this.width / 2 - 100, 205, "Blink Time ", 50, 3000, BlockHighlightSettings.highlightBlinkSpeed.get(), click ->
+		addWidget(highlightAffectedByLight = new GuiToggleButton(this.width / 2 - 100, 155, 150, 20, new TextComponent("Dim with light levels: "), BlockHighlightSettings.highlightAffectedByLight));
+		addWidget(blinkSelectionBox = new GuiToggleButton(this.width / 2 - 100, 180, 150, 20, new TextComponent("Blink Block Highlight: "), BlockHighlightSettings.highlightBlink));
+		addWidget(blinkTimerSlider = new Slider(this.width / 2 - 100, 205, new TextComponent("Blink Time "), 50, 3000, BlockHighlightSettings.highlightBlinkSpeed.get(), click ->
 		{
 		}, null));
 	}
 
 	@Override
-	public void render(int p_render_1_, int p_render_2_, float p_render_3_)
+	public void render(@NotNull PoseStack poseStack, int p_97922_, int p_97923_, float p_97924_)
 	{
-		this.renderBackground();
-		super.render(p_render_1_, p_render_2_, p_render_3_);
+		super.render(poseStack, p_97922_, p_97923_, p_97924_);
 
-		if(editingColor)
-		{
-			this.boxOutlineColorSelelection.drawScreen();
-			this.boxFillColorSelelection.drawScreen();
-		}
+//		if(editingColor)
+//		{
+//			this.boxOutlineColorSelelection.drawScreen();
+//			this.boxFillColorSelelection.drawScreen();
+//		}
 
 		BlockHighlightSettings.highlightBlinkSpeed.set(this.blinkTimerSlider.getValueInt());
 	}

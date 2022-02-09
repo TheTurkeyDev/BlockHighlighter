@@ -1,12 +1,13 @@
 modLoader="javafml"
-loaderVersion="[25,)"
-issueTrackerURL="https://github.com/Turkey2349/BlockHighlighter/issues"
+loaderVersion="[39,)"
+issueTrackerURL="https://github.com/TheTurkeyDev/BlockHighlighter/issues"
+license="MIT"
 [[mods]]
     modId="blockhighlighter"
     version="1.2"
     displayName="Block Highlighter"
     displayURL="https://minecraft.curseforge.com/projects/block-highlighter"
-    authors="Turkey2349"
+    authors="turkeydev"
     description='''
     Provides a QoL improvment of the vanilla block highlighting system!
     '''
